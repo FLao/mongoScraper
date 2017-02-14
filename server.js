@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 // Database configuration with mongoose
-mongoose.connect("mongodb://localhost/nytimesscraper");
+mongoose.connect("mongodb://localhost/week18day3mongoose");
 var db = mongoose.connection;
 
 // Show any mongoose errors
@@ -57,7 +57,7 @@ app.get("/", function(req, res) {
 // A GET request to scrape the echojs website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with request
-  request("http://www.nytimes.com/", function(error, response, html) {
+  request("http://www.echojs.com/", function(error, response, html) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(html);
     // Now, we grab every h2 within an article tag, and do the following:
@@ -85,7 +85,6 @@ app.get("/scrape", function(req, res) {
           console.log(doc);
         }
       });
-
     });
   });
   // Tell the browser that we finished scraping the text
@@ -154,16 +153,11 @@ app.post("/articles/:id", function(req, res) {
         }
       });
     }
-  }); });
-
-app.delete("/articles/:id", function(req, res) {
-  console.log("id: " + req.params.id)
-  .remove({"_id": req.params.id})
-})
+  });
+});
 
 
-
-// Listen on port 8080
-app.listen(8080, function() {
-  console.log("App running on port 8080!");
+// Listen on port 3000
+app.listen(3000, function() {
+  console.log("App running on port 3000!");
 });

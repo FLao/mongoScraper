@@ -156,6 +156,7 @@ app.post("/articles/:id", function(req, res) {
   });
 });
 
+/*
 app.delete("/articles/:id", function(req, res) {
   console.log("id: " + req.params.id)
   Article.remove({"_id": req.params.id})
@@ -171,11 +172,11 @@ app.delete("/articles/:id", function(req, res) {
     }
   });
 })
+*/
 
-app.delete("/articles/:id", function(req, res) {
+app.delete("/notes/:id", function(req, res) {
   console.log("id: " + req.params.id)
-  /*
-  Article.remove({"_id": req.params.id})
+  Note.remove({"_id": req.params.id})
   // Execute the above query
   .exec(function(err, doc) {
     // Log any errors
@@ -187,9 +188,7 @@ app.delete("/articles/:id", function(req, res) {
       res.send(doc);
     }
   });
-  */
 })
-
 
 // Listen on port 3000
 app.listen(3000, function() {

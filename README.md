@@ -1,2 +1,2 @@
 # mongoScraper
-Scraping New York Times and saving it using mongoDB.
+Scraping shoryuken.com and saving it using mongoDB.

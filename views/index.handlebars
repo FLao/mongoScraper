@@ -1,0 +1,27 @@
+<div id="wrapper">
+    <h1>Article Scraper</h1>
+    <div id="articles">
+        <ol>
+            {{#each article}}
+                <li>
+                    {{this.title}}
+                    {{this.link}}
+                    {{this.note._id}}
+                    <br>
+                    <form class="create-update-form" action="/{{this._id}}" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="comment">
+                        </div>
+                        <div class="btn">   
+                            <button type="submit" class="sub">Save Note</button>
+                        </div>
+                    </form>
+                </li>
+                <br>
+            {{/each}}
+        </ol>
+    </div>
+    <div id="notes">
+    </div>
+</div>
+    

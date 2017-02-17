@@ -5,6 +5,10 @@
 // Dependencies
 var express = require("express");
 var bodyParser = require("body-parser");
+var methodOverride = require("method-override");
+
+var PORT = process.env.PORT || 3000;
+
 var logger = require("morgan");
 var mongoose = require("mongoose");
 // Requiring our Note and Article models
@@ -28,11 +32,20 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-// Make public a static dir
-app.use(express.static("public"));
+// Override with POST having ?_method=DELETE
+app.use(methodOverride("_method"));
+
+// Set Handlebars.
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
+// Serve static content for the app from the "public" directory in the application directory.
+app.use(express.static(process.cwd() + "/public"));
 
 // Database configuration with mongoose
-mongoose.connect("mongodb://localhost/nytimesscraper");
+mongoose.connect("mongodb://localhost/shoryukenscraper");
 var db = mongoose.connection;
 
 // Show any mongoose errors
@@ -45,19 +58,24 @@ db.once("open", function() {
   console.log("Mongoose connection successful.");
 });
 
-
 // Routes
 // ======
 
 // Simple index route
 app.get("/", function(req, res) {
-  res.send("index.html");
+  Article.find({}, function(error, doc) {
+    var hbsObject = {
+      article: doc
+    };
+    console.log(hbsObject);
+    res.render("index", hbsObject);
+  });
 });
 
-// A GET request to scrape the echojs website
+// A GET request to scrape the website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with request
-  request("http://www.nytimes.com/", function(error, response, html) {
+  request("http://www.shoryuken.com/", function(error, response, html) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(html);
     // Now, we grab every h2 within an article tag, and do the following:
@@ -91,6 +109,7 @@ app.get("/scrape", function(req, res) {
   res.send("Scrape Complete");
 });
 
+
 // This will get the articles we scraped from the mongoDB
 app.get("/articles", function(req, res) {
   // Grab every doc in the Articles array
@@ -101,10 +120,11 @@ app.get("/articles", function(req, res) {
     }
     // Or send the doc to the browser as a json object
     else {
-      res.json(doc);
+       res.json(doc);
     }
   });
 });
+
 
 // Grab an article by it's ObjectId
 app.get("/articles/:id", function(req, res) {
@@ -125,7 +145,7 @@ app.get("/articles/:id", function(req, res) {
   });
 });
 
-
+/*
 // Create a new note or replace an existing note
 app.post("/articles/:id", function(req, res) {
   // Create a new note and pass the req.body to the entry
@@ -137,7 +157,10 @@ app.post("/articles/:id", function(req, res) {
     if (error) {
       console.log(error);
     }
+    //else 
+    //  res.send(doc);
     // Otherwise
+    
     else {
       // Use the article id to find and update it's note
       Article.findOneAndUpdate({ "_id": req.params.id }, { "note": doc._id })
@@ -150,9 +173,43 @@ app.post("/articles/:id", function(req, res) {
         else {
           // Or send the document to the browser
           res.send(doc);
-        }
+        }      
       });
+    }  
+  });
+});
+*/
+
+// Create a new note or replace an existing note
+app.post("/:id", function(req, res) {
+  // Create a new note and pass the req.body to the entry
+  var newNote = new Note(req);
+
+  // And save the new note the db
+  newNote.save(function(error, doc) {
+    // Log any errors
+    if (error) {
+      console.log(error);
     }
+    //else 
+    //  res.send(doc);
+    // Otherwise
+    
+    else {
+      // Use the article id to find and update it's note
+      Article.findOneAndUpdate({ "_id": req.params.id }, { "note": doc._id })
+      // Execute the above query
+      .exec(function(err, doc) {
+        // Log any errors
+        if (err) {
+          console.log(err);
+        }
+        else {
+          // Or send the document to the browser
+          res.send(doc);
+        }      
+      });
+    }  
   });
 });
 
@@ -191,6 +248,6 @@ app.delete("/notes/:id", function(req, res) {
 })
 
 // Listen on port 3000
-app.listen(3000, function() {
-  console.log("App running on port 3000!");
+app.listen(8080, function() {
+  console.log("App running on port 8080!");
 });

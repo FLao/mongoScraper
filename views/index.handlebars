@@ -8,7 +8,11 @@
                 <li>
                     {{this.title}}
                     {{this.link}}
-                    {{this.note._id}}
+                    {{#if this.note}}
+                    <p class="well">
+                        {{this.note.comment}}
+                    </p>
+                    {{/if}}
                     <br>
                     <form class="create-update-form" action="/{{this._id}}" method="POST">
                         <div class="form-group">

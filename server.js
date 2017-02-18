@@ -63,7 +63,7 @@ db.once("open", function() {
 
 // Simple index route
 app.get("/", function(req, res) {
-  Article.find({}, function(error, doc) {
+  Article.find({}).populate('note').exec(function(error, doc) {
     var hbsObject = {
       article: doc
     };
@@ -183,7 +183,7 @@ app.post("/articles/:id", function(req, res) {
 // Create a new note or replace an existing note
 app.post("/:id", function(req, res) {
   // Create a new note and pass the req.body to the entry
-  var newNote = new Note(req);
+  var newNote = new Note(req.bo);
 
   // And save the new note the db
   newNote.save(function(error, doc) {

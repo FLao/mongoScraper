@@ -183,7 +183,7 @@ app.post("/articles/:id", function(req, res) {
 // Create a new note or replace an existing note
 app.post("/:id", function(req, res) {
   // Create a new note and pass the req.body to the entry
-  var newNote = new Note(req.bo);
+  var newNote = new Note(req.body);
 
   // And save the new note the db
   newNote.save(function(error, doc) {

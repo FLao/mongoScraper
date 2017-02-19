@@ -11,6 +11,9 @@
                     {{#if this.note}}
                     <p class="well">
                         {{this.note.comment}}
+                        <div class="btn">   
+                            <button data-id="{{this.note._id}}" id="deletenote">Delete Note</button>
+                        </div>
                     </p>
                     {{/if}}
                     <br>

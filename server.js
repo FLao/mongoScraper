@@ -41,7 +41,8 @@ app.set("view engine", "handlebars");
 app.use(express.static(process.cwd() + "/public"));
 
 // Database configuration with mongoose
-mongoose.connect("mongodb://localhost/shoryukenscraper");
+//mongoose.connect("mongodb://localhost/shoryukenscraper");
+mongoose.connect("mongodb://heroku_tds6xj2t:tros3llla8me2tpriofhl7td1j@ds157459.mlab.com:57459/heroku_tds6xj2t");
 var db = mongoose.connection;
 
 // Show any mongoose errors

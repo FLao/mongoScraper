@@ -12,13 +12,17 @@
                     {{this.title}}
                     {{this.link}}
                     {{#if this.note}}
+                    {{#each this.note}}
+                    <li>
                     <p class="well">
                         {{this.note.comment}}
                         <div class="btn">   
                             <button data-id="{{this.note._id}}" id="deletenote">Delete Note</button>
                         </div>
                     </p>
-                    {{/if}}
+                    </li>
+                    {{/each}}
+                    {{/if}}                    
                     <br>
                     <form class="create-update-form" action="/articles/{{this._id}}/notes" method="POST">
                         <div class="form-group">

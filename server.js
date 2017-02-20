@@ -41,8 +41,8 @@ app.set("view engine", "handlebars");
 app.use(express.static(process.cwd() + "/public"));
 
 // Database configuration with mongoose
-//mongoose.connect("mongodb://localhost/shoryukenscraper");
-mongoose.connect("mongodb://heroku_tds6xj2t:tros3llla8me2tpriofhl7td1j@ds157459.mlab.com:57459/heroku_tds6xj2t");
+mongoose.connect("mongodb://localhost/shoryukenscraper");
+// mongoose.connect("mongodb://heroku_tds6xj2t:tros3llla8me2tpriofhl7td1j@ds157459.mlab.com:57459/heroku_tds6xj2t");
 var db = mongoose.connection;
 
 // Show any mongoose errors
@@ -103,7 +103,7 @@ app.get("/scrape", function(req, res) {
     });
   });
   // Tell the browser that we finished scraping the text
-  res.send(doc);
+  res.send("Scrape complete!");
 });
 
 
@@ -158,7 +158,8 @@ app.post("/articles/:id/notes", function(req, res) {
     
     else {
       // Use the article id to find and update it's note
-      Article.findOneAndUpdate({ "_id": req.params.id }, { "note": doc._id })
+      Article.findOneAndUpdate({ "_id": req.params.id }, { $push: { "note": doc._id } }, { new: true })
+   //   { $push: { "notes": doc._id } }, { new: true }
       // Execute the above query
       .exec(function(err, doc) {
         // Log any errors

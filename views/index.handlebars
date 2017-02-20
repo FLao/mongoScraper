@@ -11,29 +11,27 @@
                 <li>
                     {{this.title}}
                     {{this.link}}
-                    {{#if this.note}}
-                    {{#each this.note}}
-                    <li>
-                    <p class="well">
-                        {{this.note.comment}}
-                        <div class="btn">   
-                            <button data-id="{{this.note._id}}" id="deletenote">Delete Note</button>
-                        </div>
-                    </p>
-                    </li>
-                    {{/each}}
-                    {{/if}}                    
-                    <br>
-                    <form class="create-update-form" action="/articles/{{this._id}}/notes" method="POST">
-                        <div class="form-group">
-                            <input type="text" name="comment">
-                        </div>
-                        <div class="btn">   
-                            <button type="submit" class="sub">Save Note</button>
-                        </div>
-                    </form>
-                </li>
+                        {{#if this.note}}
+                            {{#each this.note}}
+                                <p class="well">
+                                    {{./comment}}
+                                    <div class="btn">
+                                        <button data-id="{{this.note._id}}" id="deletenote">Delete Note</button>
+                                    </div>
+                                </p>
+                            {{/each}}
+                        {{/if}}
                 <br>
+        <form class="create-update-form" action="/articles/{{this._id}}/notes" method="POST">
+            <div class="form-group">
+                <input type="text" name="comment">
+            </div>
+            <div class="btn">
+                <button type="submit" class="sub">Save Note</button>
+            </div>
+        </form>
+                </li>
+            <br>
             {{/each}}
         </ol>
     </div>

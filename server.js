@@ -110,7 +110,7 @@ app.get("/scrape", function(req, res) {
 // This will get the articles we scraped from the mongoDB
 app.get("/articles", function(req, res) {
   // Grab every doc in the Articles array
-  Article.find({}, function(error, doc) {
+  Article.find({}).populate('note').exec(function(error, doc) {
     // Log any errors
     if (error) {
       console.log(error);
@@ -159,7 +159,6 @@ app.post("/articles/:id/notes", function(req, res) {
     else {
       // Use the article id to find and update it's note
       Article.findOneAndUpdate({ "_id": req.params.id }, { $push: { "note": doc._id } }, { new: true })
-   //   { $push: { "notes": doc._id } }, { new: true }
       // Execute the above query
       .exec(function(err, doc) {
         // Log any errors

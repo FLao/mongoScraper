@@ -2,8 +2,11 @@
     <div class="jumbotron">
         <h1>Fighting Games Article Scraper</h1>
     </div>
+    <div id="scrape">
+        <button type="button" class="btn btn-secondary btn-lg" id="scrapearticles">Scrape Articles</button>
+    </div>
     <div id="articles">
-        <ol>
+        <ol>        
             {{#each article}}
                 <li>
                     {{this.title}}
@@ -17,7 +20,7 @@
                     </p>
                     {{/if}}
                     <br>
-                    <form class="create-update-form" action="/{{this._id}}" method="POST">
+                    <form class="create-update-form" action="/articles/{{this._id}}/notes" method="POST">
                         <div class="form-group">
                             <input type="text" name="comment">
                         </div>
@@ -29,8 +32,6 @@
                 <br>
             {{/each}}
         </ol>
-    </div>
-    <div id="notes">
     </div>
 </div>
     

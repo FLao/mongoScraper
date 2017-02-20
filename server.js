@@ -1,13 +1,9 @@
-/* Showing Mongoose's "Populated" Method (18.3.8)
- * INSTRUCTOR ONLY
- * =============================================== */
-
 // Dependencies
 var express = require("express");
 var bodyParser = require("body-parser");
 var methodOverride = require("method-override");
 
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 8080;
 
 var logger = require("morgan");
 var mongoose = require("mongoose");
@@ -106,7 +102,7 @@ app.get("/scrape", function(req, res) {
     });
   });
   // Tell the browser that we finished scraping the text
-  res.send("Scrape Complete");
+  res.send(doc);
 });
 
 
@@ -124,7 +120,6 @@ app.get("/articles", function(req, res) {
     }
   });
 });
-
 
 // Grab an article by it's ObjectId
 app.get("/articles/:id", function(req, res) {
@@ -145,9 +140,8 @@ app.get("/articles/:id", function(req, res) {
   });
 });
 
-/*
 // Create a new note or replace an existing note
-app.post("/articles/:id", function(req, res) {
+app.post("/articles/:id/notes", function(req, res) {
   // Create a new note and pass the req.body to the entry
   var newNote = new Note(req.body);
 
@@ -178,58 +172,6 @@ app.post("/articles/:id", function(req, res) {
     }  
   });
 });
-*/
-
-// Create a new note or replace an existing note
-app.post("/:id", function(req, res) {
-  // Create a new note and pass the req.body to the entry
-  var newNote = new Note(req.body);
-
-  // And save the new note the db
-  newNote.save(function(error, doc) {
-    // Log any errors
-    if (error) {
-      console.log(error);
-    }
-    //else 
-    //  res.send(doc);
-    // Otherwise
-    
-    else {
-      // Use the article id to find and update it's note
-      Article.findOneAndUpdate({ "_id": req.params.id }, { "note": doc._id })
-      // Execute the above query
-      .exec(function(err, doc) {
-        // Log any errors
-        if (err) {
-          console.log(err);
-        }
-        else {
-          // Or send the document to the browser
-          res.send(doc);
-        }      
-      });
-    }  
-  });
-});
-
-/*
-app.delete("/articles/:id", function(req, res) {
-  console.log("id: " + req.params.id)
-  Article.remove({"_id": req.params.id})
-  // Execute the above query
-  .exec(function(err, doc) {
-    // Log any errors
-    if (err) {
-      console.log(err);
-    }
-    else {
-    // Or send the document to the browser
-      res.send(doc);
-    }
-  });
-})
-*/
 
 app.delete("/notes/:id", function(req, res) {
   console.log("id: " + req.params.id)
@@ -247,7 +189,7 @@ app.delete("/notes/:id", function(req, res) {
   });
 })
 
-// Listen on port 3000
+// Listen on port 8080
 app.listen(8080, function() {
   console.log("App running on port 8080!");
 });
